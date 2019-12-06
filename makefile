@@ -13,23 +13,19 @@ BrnoMHD: BrnoMHD.cpp
 rebuild: clean all
 
 #argumenty programu
-#argv1 pocet zamestnancu
-#argv2 pocet soubezne zkoumanych podnetu pro jednoho zamestnance
-#argv3 pocet soubezne zpracovavanych 2 instancnich rizeni 1 zamestnancem
-#argv4 pocet rizeni zpracovavanych najednou jednim zamestnancem
-#argv5 doba behu simulace(roky), pouze celociselne
-#argv6 nazev vystupniho souboru(bude dodana pripona .out)
+#arg 1 - Kolik procent lidi ignoruje pocasi
+#arg 2 - Kolik dni simulujeme
+#arg 3 - Kolik lidi simulujeme x100
+#arg 4 - Koefisient zaplneni MHD
 run:
-	./BrnoMHD d d d d d experiment1		#testujeme defaultni hodnoty, chovani systemu
+	./BrnoMHD 57 365 3800 20 >realna.out
+	./BrnoMHD 0 365 3800 20 >experiment1.out
+	./BrnoMHD 101 365 3800 20 >experiment2.out
+	./BrnoMHD 57 365 3800 100 >experiment3.out
+	./BrnoMHD 0 365 3800 100 >experiment4.out
 	
 clean:
-	rm -f BrnoMHD *.tar.gz *.zip *.out
-
-tarball:
-	tar -zcf $(AUTHOR).tar.gz $(FILES)
-
-tar:
-	tar -cf $(AUTHOR).tar $(FILES)
+	rm -f BrnoMHD *.zip *.out
 
 zip:
-	zip 07_$(AUTHOR).zip $(FILES)
+	zip 01_$(AUTHOR).zip $(FILES)
