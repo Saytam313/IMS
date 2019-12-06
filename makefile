@@ -16,7 +16,7 @@ rebuild: clean all
 #arg 1 - Kolik procent lidi ignoruje pocasi, pokud je vetsi jak 100, tak jsou pouze auta
 #arg 2 - Kolik dni simulujeme
 #arg 3 - Kolik lidi simulujeme x100
-#arg 4 - Koefisient zaplneni MHD
+#arg 4 - Koeficient zaplneni MHD
 run:
 	./BrnoMHD 57 365 3800 20 >realna.out
 	./BrnoMHD 0 365 3800 20 >experiment1.out
