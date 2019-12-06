@@ -18,11 +18,11 @@ rebuild: clean all
 #arg 3 - Kolik lidi simulujeme x100
 #arg 4 - Koeficient zaplneni MHD
 run:
-	./BrnoMHD 57 365 3800 20 >realna.out
-	./BrnoMHD 0 365 3800 20 >experiment1.out
-	./BrnoMHD 101 365 3800 20 >experiment2.out
-	./BrnoMHD 57 365 3800 100 >experiment3.out
-	./BrnoMHD 0 365 3800 100 >experiment4.out
+	./BrnoMHD 57 365 3800 20 >E_real.out
+	./BrnoMHD 0 365 3800 20 >E_mhd_only.out
+	./BrnoMHD 101 365 3800 20 >E_auta_only.out
+	./BrnoMHD 57 365 3800 100 >E_mhd_fullCap.out
+	./BrnoMHD 0 365 3800 100 >E_mhd_only_fullCap.out
 	
 clean:
 	rm -f BrnoMHD *.zip *.out

@@ -139,6 +139,7 @@ int main(int argc, char *argv[]){
     Init(0);
     (new Rok)->Activate();
     Run();
+    printf("Statistika pocasi za simulovane obdobi:\n");
     pocasi.Output();
 
     PocetTramvaj=PocetTramvaj/zaplneni;
@@ -151,10 +152,10 @@ int main(int argc, char *argv[]){
     PocetAut=(PocetAut*100)/1.5;
     
     printf("Auto: %d\n",PocetAut);
-    printf("Šaliny: %d\n",PocetTramvaj);
+    printf("Tramvaje: %d\n",PocetTramvaj);
     printf("Trolejbus: %d\n",PocetTrolejbus);
     printf("Autobus: %d\n",PocetAutobus);
     printf("Cestovatelu: %d\n",PocetCestovatelu*100);
     
-    printf("Uhlíková stopa na %d dnů: %f kilotun\n",kolik_dni,(PocetAut*VZDALENOST_PRACE*CO_STOPA_AUTO + PocetTramvaj*VZDALENOST_MHD*CO_STOPA_SALINA + PocetTrolejbus*VZDALENOST_MHD*CO_STOPA_SALINA + PocetAutobus*VZDALENOST_MHD*CO_STOPA_AUTOBUS)/100000000);
+    printf("Uhlikova stopa na %d dnu: %f kt\n",kolik_dni,(PocetAut*VZDALENOST_PRACE*CO_STOPA_AUTO + PocetTramvaj*VZDALENOST_MHD*CO_STOPA_SALINA + PocetTrolejbus*VZDALENOST_MHD*CO_STOPA_SALINA + PocetAutobus*VZDALENOST_MHD*CO_STOPA_AUTOBUS)/100000000);
 }
