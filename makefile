@@ -13,7 +13,7 @@ BrnoMHD: BrnoMHD.cpp
 rebuild: clean all
 
 #argumenty programu
-#arg 1 - Kolik procent lidi ignoruje pocasi
+#arg 1 - Kolik procent lidi ignoruje pocasi, pokud je vetsi jak 100, tak jsou pouze auta
 #arg 2 - Kolik dni simulujeme
 #arg 3 - Kolik lidi simulujeme x100
 #arg 4 - Koefisient zaplneni MHD
