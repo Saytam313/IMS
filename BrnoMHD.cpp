@@ -17,7 +17,7 @@ int PocetCestovatelu=0;
 
 int Pocasi=0;
 double zaplneni=0;
-
+int autaonly_flag=0;
 Store MistaTramvaje("MistaTramvaje", 0);
 Store MistaTrolejbusy("MistaTrolejbusy", 0);
 Store MistaAutobusy("MistaAutobusy", 0);
@@ -36,7 +36,7 @@ class Cestovatel: public Process{
             goto jedu_MHD;
 		}else{
 			//Diva se na pocasi
-			if(Uniform(0,100)>Pocasi){
+			if(Uniform(0,100)>Pocasi+autaonly_flag){
 				//GOTO jedu MHD
                 goto jedu_MHD;
 			}else{
@@ -132,6 +132,10 @@ int main(int argc, char *argv[]){
     pocet_obyvatel=std::atoi(argv[3])*0.8;
     zaplneni=std::atof(argv[4])/100;
     
+    if(ignore_pocasi>100){
+    	autaonly_flag=10000;
+    }
+
     Init(0);
     (new Rok)->Activate();
     Run();
