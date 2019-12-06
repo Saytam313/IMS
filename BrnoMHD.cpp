@@ -2,46 +2,46 @@
 #include<cstdio>
 
 
-#define POCET_OBYVATEL 3800	//obyvatele /100
 #define CO_STOPA_AUTO 144.1		//g/km
 #define CO_STOPA_SALINA 35.1	//g/km
 #define CO_STOPA_AUTOBUS 104.7	//g/km
 
-#define KAPACITA_SALINA 162 	//Cestujicich
 #define VZDALENOST_PRACE 12 	//KM
 #define VZDALENOST_MHD 10.59
-#define CESTOVATELE_AUTO 1.6	//cestujicich v aute
-#define ROK 7
 
 int PocetAut=0;
 int PocetTramvaj=0;
 int PocetAutobus=0;
 int PocetTrolejbus=0;
+int PocetCestovatelu=0;
 
 int Pocasi=0;
-    
+double zaplneni=0;
+
 Store MistaTramvaje("MistaTramvaje", 0);
 Store MistaTrolejbusy("MistaTrolejbusy", 0);
 Store MistaAutobusy("MistaAutobusy", 0);
 
+int ignore_pocasi;
+int kolik_dni;
+int pocet_obyvatel;
 
-int ignore_pocasi=0;
-int tolerance_pocasi=0;
+Stat pocasi;
 
 class Cestovatel: public Process{
 	void Behavior(){
+        PocetCestovatelu++;
 		if(Uniform(0,100)>=ignore_pocasi){
 			//GOTO Jedu MHD bez pocasi
             goto jedu_MHD;
 		}else{
 			//Diva se na pocasi
-			if(Uniform(0,100)>Pocasi-tolerance_pocasi){
+			if(Uniform(0,100)>Pocasi){
 				//GOTO jedu MHD
                 goto jedu_MHD;
 			}else{
 				//nejedu MHD
                 PocetAut++;
-				//goto konec;
 				return;
 			}
 		}
@@ -77,65 +77,80 @@ jedu_MHD:
 };    
     
 class NovyDen: public Event{
-    int CestujiciLidi=POCET_OBYVATEL;
-    //generovani pocasi
+    int CestujiciLidi=pocet_obyvatel;
+    int a = 0;
 
     void Behavior(){
-        Pocasi=Uniform(0,100);
-        while(CestujiciLidi>0){
-    	    CestujiciLidi -=3;
-            //vygeneruj 264 lidi
-            for(int i=0;3>=i;i++){
-                (new Cestovatel)->Activate();
-                Activate(Time+1);
+        if(CestujiciLidi==pocet_obyvatel){
+            Pocasi=Uniform(0,100);
+            pocasi(Pocasi);
+            a = pocet_obyvatel%3;
+        }
+        
+        if(CestujiciLidi>0){
+            if(CestujiciLidi >= 3){
+                CestujiciLidi-=3;
+                //vygeneruj 264 lidi
+                for(int i=0;3>i;i++){
+                    (new Cestovatel)->Activate();
+                }
+            } else {
+                CestujiciLidi-=a;
+                //vygeneruj 264 lidi
+                for(int i=0;a>i;i++){
+                    (new Cestovatel)->Activate();
+                }
             }
+            Activate(Time + 1);
         }
     }
+};
+
+class Rok : public Event{
+    int dnu=0;
     
+	void Behavior(){
+        if(dnu < kolik_dni) {
+            dnu++;
+		    (new NovyDen)->Activate();
+		    Activate(Time + 1*60*24);
+        }
+	}
 };
                
 int main(int argc, char *argv[]){
-	ignore_pocasi=std::atoi(argv[1]);
-	tolerance_pocasi=std::atoi(argv[2]);
-
-    Init(0,1000);
-    for(int i=0;ROK>i;i++){
-        (new NovyDen)->Activate();
-    }
-    Run();
-
     
-	// primitivni zpracovani argumentu, pro vice vystupu s ruznymy hodnotami u 'make run'
+    // primitivni zpracovani argumentu, pro vice vystupu s ruznymy hodnotami u 'make run'
 	
+	//arg 1 - Kolik procent lidi ignoruje pocasi
+	//arg 2 - Kolik dni simulujeme
+	//arg 3 - Kolik lidi simulujeme x100
+    //arg 4 - Koefisient zaplneni MHD
 
-	//arg 1 - % MHD
-	//arg 2 - % Auta
-	//arg 3 - % zaplneni vozu mhd
-	//arg 4 - pocet cestujicich v aute
-/*
-	double cestuje_mhd_prc = std::atof(argv[1]);
-	double cestuje_autem_prc = std::atof(argv[2]);
+    ignore_pocasi=std::atoi(argv[1]);
+    kolik_dni=std::atoi(argv[2]);
+    pocet_obyvatel=std::atoi(argv[3])*0.8;
+    zaplneni=std::atof(argv[4])/100;
+    
+    Init(0);
+    (new Rok)->Activate();
+    Run();
+    pocasi.Output();
 
- 	double ZAPLNENI_MHD=std::atof(argv[3]);
-	double ZAPLNENI_AUTO=std::atof(argv[4]);
-
-	double Pocet_aut = (((cestuje_autem_prc/100) * POCET_OBYVATEL)/ZAPLNENI_AUTO);
-	double Pocet_mhd = (((cestuje_mhd_prc/100) * POCET_OBYVATEL)/(KAPACITA_SALINA*(ZAPLNENI_MHD/100)));
-
-	double CO_aut=CO_STOPA_AUTO*Pocet_aut*VZDALENOST_PRACE;
-	double CO_mhd=CO_STOPA_SALINA*Pocet_mhd*VZDALENOST_PRACE;
-
-	double CO_celkem_den=CO_aut+CO_mhd;
-	double CO_celkem_rok=(CO_celkem_den*365)/1000000;
-
-	printf("Pocet_aut: %f, Pocet_mhd: %f\n",Pocet_aut,Pocet_mhd);
-	printf("CO za den: %f t, za rok: %f t\n",CO_celkem_den/1000000,CO_celkem_rok);
-*/
-
+    PocetTramvaj=PocetTramvaj/zaplneni;
+    PocetTrolejbus=PocetTrolejbus/zaplneni;
+    PocetAutobus=PocetAutobus/zaplneni;
+    
+    PocetTramvaj*=kolik_dni;
+    PocetTrolejbus*=kolik_dni;
+    PocetAutobus*=kolik_dni;
+    PocetAut=(PocetAut*100)/1.5;
+    
     printf("Auto: %d\n",PocetAut);
     printf("Šaliny: %d\n",PocetTramvaj);
     printf("Trolejbus: %d\n",PocetTrolejbus);
     printf("Autobus: %d\n",PocetAutobus);
+    printf("Cestovatelu: %d\n",PocetCestovatelu*100);
     
-    printf("Uhlíková stopa na týden: %f tun\n",(PocetAut*VZDALENOST_PRACE*CO_STOPA_AUTO + PocetTramvaj*VZDALENOST_MHD*CO_STOPA_SALINA + PocetTrolejbus*VZDALENOST_MHD*CO_STOPA_SALINA + PocetAutobus*VZDALENOST_MHD*CO_STOPA_AUTOBUS)/10000);
+    printf("Uhlíková stopa na %d dnů: %f kilotun\n",kolik_dni,(PocetAut*VZDALENOST_PRACE*CO_STOPA_AUTO + PocetTramvaj*VZDALENOST_MHD*CO_STOPA_SALINA + PocetTrolejbus*VZDALENOST_MHD*CO_STOPA_SALINA + PocetAutobus*VZDALENOST_MHD*CO_STOPA_AUTOBUS)/100000000);
 }
