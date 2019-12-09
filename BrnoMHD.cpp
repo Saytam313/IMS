@@ -139,8 +139,8 @@ int main(int argc, char *argv[]){
     Init(0);
     (new Rok)->Activate();
     Run();
-    printf("Statistika pocasi za simulovane obdobi:\n");
-    pocasi.Output();
+    //printf("Statistika pocasi za simulovane obdobi:\n");
+    //pocasi.Output();
 
     PocetTramvaj=PocetTramvaj/zaplneni;
     PocetTrolejbus=PocetTrolejbus/zaplneni;
@@ -151,11 +151,11 @@ int main(int argc, char *argv[]){
     PocetAutobus*=kolik_dni;
     PocetAut=(PocetAut*100)/1.5;
     
-    printf("Auto: %d\n",PocetAut);
-    printf("Tramvaje: %d\n",PocetTramvaj);
-    printf("Trolejbus: %d\n",PocetTrolejbus);
-    printf("Autobus: %d\n",PocetAutobus);
-    printf("Cestovatelu: %d\n",PocetCestovatelu*100);
+    Print("Auto: %d\n",PocetAut);
+    Print("Tramvaje: %d\n",PocetTramvaj);
+    Print("Trolejbus: %d\n",PocetTrolejbus);
+    Print("Autobus: %d\n",PocetAutobus);
+    Print("Cestujicich: %d\n",PocetCestovatelu*100);
     
-    printf("Uhlikova stopa na %d dnu: %f kt\n",kolik_dni,(PocetAut*VZDALENOST_PRACE*CO_STOPA_AUTO + PocetTramvaj*VZDALENOST_MHD*CO_STOPA_SALINA + PocetTrolejbus*VZDALENOST_MHD*CO_STOPA_SALINA + PocetAutobus*VZDALENOST_MHD*CO_STOPA_AUTOBUS)/100000000);
+    Print("Uhlikova stopa na %d dni: %f kt\n",kolik_dni,(PocetAut*VZDALENOST_PRACE*CO_STOPA_AUTO + PocetTramvaj*VZDALENOST_MHD*CO_STOPA_SALINA + PocetTrolejbus*VZDALENOST_MHD*CO_STOPA_SALINA + PocetAutobus*VZDALENOST_MHD*CO_STOPA_AUTOBUS)/100000000);
 }

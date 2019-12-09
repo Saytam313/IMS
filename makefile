@@ -3,14 +3,12 @@ PFLAGS=-lsimlib -lm
  
 CC = g++
 AUTHOR = xmatya11_xtetur01
-FILES = BrnoMHD.cpp Makefile dokumentace.pdf
+FILES = BrnoMHD.cpp makefile dokumentace.pdf
 
 all: BrnoMHD
 
 BrnoMHD: BrnoMHD.cpp
 	$(CC) $(CFLAGS) -o $@ BrnoMHD.cpp $(PFLAGS)
-
-rebuild: clean all
 
 #argumenty programu
 #arg 1 - Kolik procent lidi ignoruje pocasi, pokud je vetsi jak 100, tak jsou pouze auta
